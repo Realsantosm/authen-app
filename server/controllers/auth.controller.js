@@ -100,6 +100,12 @@ const logIn = async (req, res) => {
 
 const logOut = async (req, res) => {
   try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV == "production", // Set to true if using HTTPS
+      sameSite: "strict",
+    });
+    return res.status(200).json({ message: "User logged out successfully" });
   } catch (err) {
     console.error("Error during logout:", err);
     res.status(500).json({ message: "Internal server error" });
