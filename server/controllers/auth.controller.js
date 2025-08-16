@@ -50,8 +50,8 @@ const signUp = async (req, res) => {
 
 const logIn = async (req, res) => {
   try {
-    const { userName, password } = req.body;
-    if (!password || !userName) {
+    const { email, password } = req.body;
+    if (!password || !email) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -82,13 +82,14 @@ const logIn = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    return res.status(201).json({
-      message: "User LogIn successfully",
+    return res.status(200).json({
+      message: "User LoggedIn successfully",
       user: {
         firstName: existUser.firstName,
         lastName: existUser.lastName,
         email: existUser.email,
         userName: existUser.userName,
+        password: existUser.password, // Avoid sending password in response
       },
     });
   } catch (err) {
@@ -97,7 +98,16 @@ const logIn = async (req, res) => {
   }
 };
 
+const logOut = async (req, res) => {
+  try {
+  } catch (err) {
+    console.error("Error during logout:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   signUp,
   logIn,
+  logOut,
 };
