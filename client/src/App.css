@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+input::placeholder {
+  @apply text-gray-500;
+  @apply font-light;
+  @apply font-semibold;
+}
