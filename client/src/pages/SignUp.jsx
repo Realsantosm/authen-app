@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import { dataContext } from "../context/UserContext";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 function SignUp() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-  });
+  let { serverUrl } = React.useContext(dataContext);
+
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [emailName, setEmail] = useState(null);
+  const [passwordName, setPassword] = useState(null);
+
   const [avatar, setAvatar] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
@@ -23,9 +27,27 @@ function SignUp() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission
+    try {
+      let data = await axios.post(
+        serverUrl + "/api/signup",
+        {
+          firstName,
+          lastName,
+          userName,
+          emailName,
+          passwordName,
+          avatar,
+        },
+        { withCredentials: true }
+      );
+
+      console.log(data);
+    } catch (err) {
+      console.error("Internal Error during sign up:", err);
+    }
   };
 
   return (
@@ -86,6 +108,7 @@ function SignUp() {
                 id="avatar-upload"
                 className="hidden"
                 accept="image/*"
+                value={avatar}
                 onChange={handleImageChange}
               />
             </label>
@@ -95,19 +118,15 @@ function SignUp() {
             <input
               type="text"
               placeholder="First Name"
-              value={formData.firstName}
-              onChange={(e) =>
-                setFormData({ ...formData, firstName: e.target.value })
-              }
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               className="w-full px-4 py-3 bg-[#2d2d2d] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
               placeholder="Last Name"
-              value={formData.lastName}
-              onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
-              }
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               className="w-full px-4 py-3 bg-[#2d2d2d] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -115,30 +134,24 @@ function SignUp() {
           <input
             type="text"
             placeholder="Username"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
             className="w-full px-4 py-3 bg-[#2d2d2d] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
             type="email"
             placeholder="Email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
+            value={emailName}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 bg-[#2d2d2d] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
             type="password"
             placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            value={passwordName}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-3 bg-[#2d2d2d] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
